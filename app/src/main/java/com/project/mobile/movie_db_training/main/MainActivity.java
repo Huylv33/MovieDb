@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private List<Movie> mNowPlayingMovies = new ArrayList<>();
     private List<Movie> mUpcomingMovies = new ArrayList<>();
     private List<Movie> mPopularMovies = new ArrayList<>();
-    private List<Movie> mTopRatedMovies = new ArrayList<>();
+    private List<Movie> mTopRatedMovies     = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

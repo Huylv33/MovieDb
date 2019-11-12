@@ -1,1 +1,2 @@
-# movie_db_training
+# MovieDB
+Discover movies, using The Movie Database API v3

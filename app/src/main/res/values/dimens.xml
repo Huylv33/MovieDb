@@ -33,4 +33,6 @@
     <dimen name="user_rating">12sp</dimen>
     <dimen name="see_all_size">14sp</dimen>
     <dimen name="main_title_size">22sp</dimen>
+    <dimen name="movie_card_width">120dp</dimen>
+    <dimen name="movie_card_height">270dp</dimen>
 </resources>
