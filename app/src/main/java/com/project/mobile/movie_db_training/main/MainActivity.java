@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -24,35 +21,16 @@ import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.search.SearchActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
-import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, MainContract.View,
-        MoviesListFragment.Callback, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MoviesListFragment.Callback {
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-    @BindView(R.id.rv_now_playing)
-    MultiSnapRecyclerView mNowPlayingRv;
-    @BindView(R.id.rv_upcoming)
-    MultiSnapRecyclerView mUpComingRv;
-    @BindView(R.id.all_now_playing)
-    TextView mSeeAllNowPlaying;
-    @BindView(R.id.all_upcoming)
-    TextView mSeeAllUpcoming;
-    private MainContract.Presenter mPresenter;
-    private MovieAdapter mNowPlayingAdapter;
-    private MovieAdapter mUpcomingAdapter;
-    private List<Movie> mNowPlayingMovies = new ArrayList<>();
-    private List<Movie> mUpcomingMovies = new ArrayList<>();
-    private List<Movie> mPopularMovies = new ArrayList<>();
-    private List<Movie> mTopRatedMovies     = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +39,14 @@ public class MainActivity extends AppCompatActivity
         initView();
         setupYoutubeView();
         ButterKnife.bind(this);
-        setListener();
-        mNowPlayingAdapter = new MovieAdapter(mNowPlayingMovies, this);
-        mUpcomingAdapter = new MovieAdapter(mUpcomingMovies, this);
-        setupRecyclerView(mNowPlayingRv, mNowPlayingAdapter, mNowPlayingMovies);
-        setupRecyclerView(mUpComingRv, mUpcomingAdapter, mUpcomingMovies);
-        mPresenter = new MainPresenterImpl();
-        mPresenter.setView(this);
-        mPresenter.fetchMovies(Constants.NOW_PLAYING);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing")).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming")).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular")).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated")).commit();
     }
 
     @Override
@@ -80,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search :
+            case R.id.search:
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
                 break;
@@ -117,36 +95,6 @@ public class MainActivity extends AppCompatActivity
         getLifecycle().addObserver(youTubePlayerView);
     }
 
-    private void setListener() {
-        mSeeAllNowPlaying.setOnClickListener(this);
-        mSeeAllUpcoming.setOnClickListener(this);
-    }
-
-    private void setupRecyclerView(MultiSnapRecyclerView view, MovieAdapter adapter, List<Movie> movies) {
-        view.setAdapter(adapter);
-        view.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-    }
-
-    @Override
-    public void showMovies(List<Movie> movies, String listType) {
-        switch (listType) {
-            case Constants.UPCOMING:
-                this.mUpcomingMovies.addAll(movies);
-                mUpcomingAdapter.notifyDataSetChanged();
-                break;
-            case Constants.NOW_PLAYING:
-                this.mNowPlayingMovies.addAll(movies);
-                mNowPlayingAdapter.notifyDataSetChanged();
-                mPresenter.fetchMovies(Constants.UPCOMING);
-                break;
-        }
-    }
-
-    @Override
-    public void showLoading(String message) {
-
-    }
-
     @Override
     public void onMovieClick(Movie movie) {
         startMovieDetail(movie);
@@ -164,18 +112,6 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, MoviesListActivity.class);
         intent.putExtra(Constants.LIST_TYPE, listType);
         startActivity(intent);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.all_now_playing:
-                startMovieList(Constants.NOW_PLAYING);
-                break;
-            case R.id.all_upcoming:
-                startMovieList(Constants.UPCOMING);
-                break;
-        }
     }
 
 }

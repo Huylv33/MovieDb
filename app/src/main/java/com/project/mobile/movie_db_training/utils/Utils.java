@@ -1,12 +1,5 @@
 package com.project.mobile.movie_db_training.utils;
 
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.cardview.widget.CardView;
-
-import com.project.mobile.movie_db_training.list.MoviesListActivity;
-
 public class Utils {
     public static String getTitleFromListType(String listType) {
         switch (listType) {
@@ -24,12 +17,4 @@ public class Utils {
         return null;
     }
 
-    public static void setListenerForMovieCard(CardView cardView, Context context, String data) {
-        cardView.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, MoviesListActivity.class);
-                    intent.putExtra(Constants.LIST_TYPE, data);
-                    context.startActivity(intent);
-                }
-        );
-    }
 }

@@ -14,7 +14,6 @@ public interface MainContract {
     interface Presenter {
 
         void fetchMovies(String option);
-        void loadMore(String option);
 
         void setView(MainContract.View view);
 

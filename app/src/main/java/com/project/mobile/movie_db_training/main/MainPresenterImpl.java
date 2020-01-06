@@ -16,7 +16,6 @@ import retrofit2.Response;
 public class MainPresenterImpl implements MainContract.Presenter {
     private String TAG = MainPresenterImpl.class.getSimpleName();
     private boolean mIsLoading = false;
-    private int mTotalPages;
     private int mPage = 1;
     private MainContract.View mView;
 
@@ -44,11 +43,6 @@ public class MainPresenterImpl implements MainContract.Presenter {
     }
 
     @Override
-    public void loadMore(String option) {
-
-    }
-
-    @Override
     public void setView(MainContract.View view) {
         mView = view;
     }
@@ -60,12 +54,10 @@ public class MainPresenterImpl implements MainContract.Presenter {
 
     private void onFetchSuccess(@NonNull MovieResponse movieResponse, String listType) {
         mIsLoading = false;
-        mTotalPages = movieResponse.getTotalPages();
         mView.showMovies(movieResponse.getMovies(), listType);
     }
 
     private void onFetchFail(String message) {
-//        mView.showLoading(message);
         Log.d(TAG,"FAIL");
     }
 }

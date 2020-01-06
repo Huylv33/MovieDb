@@ -4,7 +4,6 @@ import com.project.mobile.movie_db_training.data.model.CreditResponse;
 import com.project.mobile.movie_db_training.data.model.CreditsResponse;
 import com.project.mobile.movie_db_training.data.model.GenresResponse;
 import com.project.mobile.movie_db_training.data.model.Movie;
-import com.project.mobile.movie_db_training.data.model.MovieCredits;
 import com.project.mobile.movie_db_training.data.model.MovieResponse;
 import com.project.mobile.movie_db_training.data.model.Person;
 import com.project.mobile.movie_db_training.data.model.ReviewResponse;
