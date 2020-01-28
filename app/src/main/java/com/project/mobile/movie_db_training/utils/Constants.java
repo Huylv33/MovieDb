@@ -30,5 +30,5 @@ public class Constants {
     public static final String RESPONSE_ERROR = "An error occurs";
     public static final String FAVORITES = "FavoriteEntity";
     public static final String WATCH_LIST = "Watch List";
-    public static final String YOUTUTE_API_KEY = "AIzaSyCnShA82nnluMPxF9DaDBaOWyYiUfUadOU";
+    public static final String ABOUT = "About";
 }

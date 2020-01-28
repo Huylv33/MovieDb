@@ -42,7 +42,7 @@ public class SearchPresenterImpl implements SearchContract.Presenter {
 
     @Override
     public void loadMore() {
-
+        //Todo
     }
 
     @Override

@@ -31,4 +31,6 @@
     <string name="cast">The Cast</string>
     <string name="biography">Biography</string>
     <string name="movie_credits">Movie Credits</string>
+    <string name="app_version">Version 1.0</string>
+    <string name="app_info">Discovering movies with TheMovieDb</string>
 </resources>

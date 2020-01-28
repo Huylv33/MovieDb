@@ -12,12 +12,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.about.AboutActivity;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
-import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.search.SearchActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
@@ -31,13 +30,13 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        setupYoutubeView();
         ButterKnife.bind(this);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing")).commit();
@@ -70,8 +69,20 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
         switch (id) {
+            case R.id.nav_home:
+                mDrawerLayout.closeDrawers();
+                break;
             case R.id.nav_discover:
                 startActivity(new Intent(this, GenresListActivity.class));
+                break;
+            case R.id.nav_share:
+                shareAppInfo();
+                break;
+            case R.id.nav_feedback:
+                sendFeedback();
+                break;
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
         return false;
@@ -90,11 +101,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    private void setupYoutubeView() {
-        YouTubePlayerView youTubePlayerView = findViewById(R.id.youtube_player_view);
-        getLifecycle().addObserver(youTubePlayerView);
-    }
-
     @Override
     public void onMovieClick(Movie movie) {
         startMovieDetail(movie);
@@ -107,11 +113,21 @@ public class MainActivity extends AppCompatActivity
         intent.putExtras(extras);
         startActivity(intent);
     }
-
-    public void startMovieList(String listType) {
-        Intent intent = new Intent(this, MoviesListActivity.class);
-        intent.putExtra(Constants.LIST_TYPE, listType);
-        startActivity(intent);
+    private void shareAppInfo() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "AppUrl.com");
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+    private void sendFeedback() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"huyit12a5@gmail.com"});
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
 }

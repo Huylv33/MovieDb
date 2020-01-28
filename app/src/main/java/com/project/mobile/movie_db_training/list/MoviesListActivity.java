@@ -13,7 +13,7 @@ import com.project.mobile.movie_db_training.data.model.Genre;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
-import com.project.mobile.movie_db_training.utils.Utils;
+import com.project.mobile.movie_db_training.utils.GettingTitle;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +35,7 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
         if (extras != null) {
             if (extras.containsKey(Constants.LIST_TYPE)) {
                 String listType = extras.getString(Constants.LIST_TYPE);
-                initToolbar(Utils.getTitleFromListType(listType));
+                initToolbar(GettingTitle.getTitleFromListType(listType));
                 moviesListFragment = MoviesListFragment.newInstance(listType);
             } else {
                 Genre genre = extras.getParcelable(Constants.GENRE);

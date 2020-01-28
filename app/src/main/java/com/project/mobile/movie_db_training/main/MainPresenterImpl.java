@@ -23,11 +23,13 @@ public class MainPresenterImpl implements MainContract.Presenter {
     public void fetchMovies(String listType) {
         if (mIsLoading) return;
         mIsLoading = true;
+        Log.d(TAG, listType);
         NetworkModule.getTMDbService()
                 .getMovieList(listType, BuildConfig.TMDB_API_KEY, mPage)
                 .enqueue(new Callback<MovieResponse>() {
                     @Override
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                        Log.d(TAG, "Success");
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchSuccess(response.body(), listType);
                         } else {
@@ -35,9 +37,10 @@ public class MainPresenterImpl implements MainContract.Presenter {
                         }
                     }
 
-                    @Override
+                   @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
-                        onFetchFail(t.getMessage());
+                       Log.d(TAG, "Fail");
+                       onFetchFail(t.getMessage());
                     }
                 });
     }
@@ -58,6 +61,6 @@ public class MainPresenterImpl implements MainContract.Presenter {
     }
 
     private void onFetchFail(String message) {
-        Log.d(TAG,"FAIL");
+        Log.d(TAG,message);
     }
 }

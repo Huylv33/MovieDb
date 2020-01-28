@@ -19,7 +19,7 @@ import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.utils.Constants;
-import com.project.mobile.movie_db_training.utils.Utils;
+import com.project.mobile.movie_db_training.utils.GettingTitle;
 import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class MoviesFragment extends Fragment implements MainContract.View{
         MoviesFragment fragment = new MoviesFragment();
         fragment.setArguments(args);
         return fragment;
-    }
+}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +64,7 @@ public class MoviesFragment extends Fragment implements MainContract.View{
             mListType = getArguments().getString(Constants.LIST_TYPE);
         }
         if (mListType != null) {
-            mListTypeTv.setText(Utils.getTitleFromListType(mListType));
+            mListTypeTv.setText(GettingTitle.getTitleFromListType(mListType));
             mSeeAllTv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

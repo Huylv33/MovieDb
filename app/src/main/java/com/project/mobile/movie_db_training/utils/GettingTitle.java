@@ -1,6 +1,6 @@
 package com.project.mobile.movie_db_training.utils;
 
-public class Utils {
+public class GettingTitle {
     public static String getTitleFromListType(String listType) {
         switch (listType) {
             case Constants.NOW_PLAYING:
