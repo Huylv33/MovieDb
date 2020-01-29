@@ -33,4 +33,15 @@
     <string name="movie_credits">Movie Credits</string>
     <string name="app_version">Version 1.0</string>
     <string name="app_info">Discovering movies with TheMovieDb</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="ui_header">User interface</string>
+    <string name="notification_header">Notification</string>
+
+    <!-- UI Preferences -->
+    <string name="theme_title">Theme</string>
+    <!-- Notification Preferences -->
+    <string name="notify_allow_title">Allow to receive notifications</string>
+
 </resources>

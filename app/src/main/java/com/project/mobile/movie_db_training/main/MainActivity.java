@@ -19,6 +19,7 @@ import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
 import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.search.SearchActivity;
+import com.project.mobile.movie_db_training.setting.SettingsActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 
 import butterknife.BindView;
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_discover:
                 startActivity(new Intent(this, GenresListActivity.class));
+                break;
+            case R.id.nav_setting:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_share:
                 shareAppInfo();
