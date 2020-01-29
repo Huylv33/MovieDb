@@ -1,6 +1,5 @@
 package com.project.mobile.movie_db_training.main;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MovieAdapter.ViewHolder holder, int position) {
         holder.bind(mMovies.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCallback.onMovieClick(mMovies.get(position));
-            }
-    });
+        holder.itemView.setOnClickListener(view -> mCallback.onMovieClick(mMovies.get(position)));
     }
 
     @Override
@@ -71,7 +65,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public void bind(Movie movie) {
             name.setText(movie.getTitle());
             rating.setText(movie.getVoteAverage());
-            Log.d("MovieAdapter", movie.getTitle() + " " + movie.getVoteAverage());
             Picasso.get().load(Constants.POSTER_BASE_URL
                     + movie.getPosterPath()).into(poster);
         }

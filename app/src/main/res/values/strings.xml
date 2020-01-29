@@ -43,5 +43,6 @@
     <string name="theme_title">Theme</string>
     <!-- Notification Preferences -->
     <string name="notify_allow_title">Allow to receive notifications</string>
+    <string name="menu_item_refresh">Refresh</string>
 
 </resources>

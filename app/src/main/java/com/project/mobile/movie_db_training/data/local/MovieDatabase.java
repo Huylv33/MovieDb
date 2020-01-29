@@ -7,19 +7,16 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
-import com.project.mobile.movie_db_training.data.model.WatchlistEntity;
 
 import static com.project.mobile.movie_db_training.data.local.MovieDatabase.DATABASE_VERSION;
 
-@Database(entities = {FavoriteEntity.class, WatchlistEntity.class}, version = DATABASE_VERSION, exportSchema = false)
+@Database(entities = {FavoriteEntity.class}, version = DATABASE_VERSION, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
     private static MovieDatabase sMovieDatabase;
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     private static final Object LOCK = new Object();
 
     public abstract FavoritesDao favoritesDao();
-
-    public abstract WatchlistDao watchListDao();
 
     public static final String DATABASE_NAME = "Room-database";
 
@@ -28,7 +25,6 @@ public abstract class MovieDatabase extends RoomDatabase {
             synchronized (LOCK) {
                 sMovieDatabase = Room.databaseBuilder(context.getApplicationContext(),
                         MovieDatabase.class, DATABASE_NAME)
-                        .allowMainThreadQueries()
                         .build();
             }
         }

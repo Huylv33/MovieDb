@@ -10,6 +10,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.project.mobile.movie_db_training.R;
@@ -39,14 +41,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         initView();
         ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing")).commit();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming")).commit();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular")).commit();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated")).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction
+                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing"));
+        fragmentTransaction
+                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
+        fragmentTransaction
+                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular"));
+        fragmentTransaction
+                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -61,6 +66,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.search:
                 Intent intent = new Intent(this, SearchActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.refresh:
+                refresh();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -133,5 +141,17 @@ public class MainActivity extends AppCompatActivity
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
-
+    private void refresh() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction
+                .replace(R.id.fragment_now_playing,  MoviesFragment.newInstance("now_playing"));
+        fragmentTransaction
+                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
+        fragmentTransaction
+                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular"));
+        fragmentTransaction
+                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
+        fragmentTransaction.commit();
+    }
 }

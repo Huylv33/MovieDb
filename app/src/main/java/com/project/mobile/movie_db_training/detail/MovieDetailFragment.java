@@ -100,7 +100,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
         setToolbar();
-        setFloatButtonListener();
+//        setFloatButtonListener();
         initCastLayout();
         initReviewsLayout();
         return rootView;
@@ -117,7 +117,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
             if (movie != null) {
                 mMovie = movie;
                 showInfo(mMovie);
-                mPresenter.showFavorite(mMovie.getId());
+//                mPresenter.showFavorite(mMovie.getId());
                 mPresenter.fetchCast(mMovie.getId());
                 mPresenter.fetchVideos(mMovie.getId());
                 mPresenter.fetchReviews(mMovie.getId());

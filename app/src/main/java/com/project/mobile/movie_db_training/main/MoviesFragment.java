@@ -46,13 +46,14 @@ public class MoviesFragment extends Fragment implements MainContract.View{
     public MoviesFragment() {
         // Required empty public constructor
     }
+
     public static MoviesFragment newInstance(String listType) {
         Bundle args = new Bundle();
         args.putString(Constants.LIST_TYPE, listType);
         MoviesFragment fragment = new MoviesFragment();
         fragment.setArguments(args);
         return fragment;
-}
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,6 +101,7 @@ public class MoviesFragment extends Fragment implements MainContract.View{
 
     @Override
     public void showMovies(List<Movie> movies, String listType) {
+        mMovies.clear();
         mMovies.addAll(movies);
         mMovieListRv.setVisibility(View.VISIBLE);
         mAdapter.notifyDataSetChanged();

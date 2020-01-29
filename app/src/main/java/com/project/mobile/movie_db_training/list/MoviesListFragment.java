@@ -120,7 +120,8 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
 
     @Override
     public void showLoading(String message) {
-        Snackbar.make(mMoviesListRv, message, Snackbar.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(mMoviesListRv, message, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     @Override
