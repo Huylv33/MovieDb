@@ -15,4 +15,7 @@
     <style name="ExpandedToolbar" parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">@android:color/transparent</item>
     </style>
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/launcher_screen</item>
+    </style>
 </resources>
