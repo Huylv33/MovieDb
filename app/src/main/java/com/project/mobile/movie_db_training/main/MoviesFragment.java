@@ -115,11 +115,13 @@ public class MoviesFragment extends Fragment implements MainContract.View{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder = null;
+        mPresenter.destroy();
+        mUnbinder.unbind();
     }
 
     @Override
     public void onDetach() {
+        mCallback = null;
         super.onDetach();
     }
 }

@@ -153,7 +153,7 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
 
     @Override
     public void fetchCast(String movieId) {
-        NetworkModule.getTMDbService().getCredits(movieId,BuildConfig.TMDB_API_KEY)
+        NetworkModule.getTMDbService().getCredits(movieId, BuildConfig.TMDB_API_KEY)
                 .enqueue(new Callback<CreditsResponse>() {
                     @Override
                     public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {

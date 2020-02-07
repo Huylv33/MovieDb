@@ -6,9 +6,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Credit;
@@ -39,7 +39,7 @@ public class PersonActivity extends AppCompatActivity implements PersonContract.
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
     private PersonContract.Presenter mPresenter;
-    private CreditApdater mApdater;
+    private CreditAdapter mAdapter;
     private List<Credit> mCredits = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +49,8 @@ public class PersonActivity extends AppCompatActivity implements PersonContract.
         initToolbar("Person");
         Intent intent = getIntent();
         if (intent == null) return;
-        mApdater = new CreditApdater(mCredits);
-        creditsRv.setAdapter(mApdater);
+        mAdapter = new CreditAdapter(mCredits);
+        creditsRv.setAdapter(mAdapter);
         creditsRv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         String id = intent.getStringExtra("personId");
         mPresenter = new PersonPresenterImpl();
@@ -71,7 +71,7 @@ public class PersonActivity extends AppCompatActivity implements PersonContract.
     @Override
     public void showCredits(List<Credit> credits) {
         mCredits.addAll(credits);
-        mApdater.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
     private void initToolbar(String title) {
         setSupportActionBar(mToolBar);

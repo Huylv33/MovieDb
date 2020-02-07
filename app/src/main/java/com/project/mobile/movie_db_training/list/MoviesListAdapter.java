@@ -61,8 +61,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Vi
 
         public void bind(Movie movie) {
             name.setText(movie.getTitle());
-            Picasso.get().load(Constants.IMAGE_BASE_URL + Constants.SMALL_IMAGE_WITDH_PATH
-                    + movie.getBackdropPath()).into(poster);
+            Picasso.get().
+                    load(Constants.IMAGE_BASE_URL + Constants.SMALL_IMAGE_WITDH_PATH
+                    + movie.getBackdropPath())
+                    .placeholder(R.drawable.fade_image)
+                    .error(R.drawable.image_error)
+                    .into(poster)
+            ;
         }
     }
 }

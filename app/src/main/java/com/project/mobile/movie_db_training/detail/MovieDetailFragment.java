@@ -207,7 +207,8 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
 
     @Override
     public void showReviews(@NonNull List<Review> reviews) {
-        mReviewTitle.setText(String.format(getString(R.string.review), reviews.size()));
+        String reviewLabel = getString(R.string.review) + " " + "(" + reviews.size() + ")";
+        mReviewTitle.setText(reviewLabel);
         if (reviews.size() > 0) {
             mReviews.addAll(reviews);
             mReviewsRv.setVisibility(View.VISIBLE);
@@ -219,6 +220,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     public void showCast(List<Cast> casts) {
         this.mCasts.clear();
         this.mCasts.addAll(casts);
+        mCastRv.setVisibility(View.VISIBLE);
         mCastAdapter.notifyDataSetChanged();
     }
 
@@ -256,6 +258,12 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         super.onDestroyView();
         mPresenter.destroy();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void onDetach() {
+        mCallback = null;
+        super.onDetach();
     }
 
     public interface Callback {

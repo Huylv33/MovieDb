@@ -2,7 +2,6 @@ package com.project.mobile.movie_db_training.person;
 
 import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.data.model.CreditResponse;
-import com.project.mobile.movie_db_training.data.model.CreditsResponse;
 import com.project.mobile.movie_db_training.data.model.Person;
 import com.project.mobile.movie_db_training.network.NetworkModule;
 
@@ -34,12 +33,12 @@ public class PersonPresenterImpl implements PersonContract.Presenter {
 
     @Override
     public void fetchCredits(String personId) {
-        NetworkModule.getTMDbService().getMovieCredits(personId,BuildConfig.TMDB_API_KEY)
+        NetworkModule.getTMDbService().getMovieCredits(personId, BuildConfig.TMDB_API_KEY)
                 .enqueue(new Callback<CreditResponse>() {
                     @Override
                     public void onResponse(Call<CreditResponse> call, Response<CreditResponse> response) {
                         if (response.body() != null)
-                        mView.showCredits(response.body().getCredits());
+                            mView.showCredits(response.body().getCredits());
                     }
 
                     @Override
@@ -52,5 +51,10 @@ public class PersonPresenterImpl implements PersonContract.Presenter {
     @Override
     public void setView(PersonContract.View view) {
         mView = view;
+    }
+
+    @Override
+    public void destroy() {
+        mView = null;
     }
 }

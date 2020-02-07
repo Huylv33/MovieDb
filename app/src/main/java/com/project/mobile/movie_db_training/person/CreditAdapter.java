@@ -1,6 +1,5 @@
 package com.project.mobile.movie_db_training.person;
 
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,18 +14,16 @@ import com.project.mobile.movie_db_training.data.model.Credit;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.squareup.picasso.Picasso;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CreditApdater extends RecyclerView.Adapter<CreditApdater.CreditHolder> {
+public class CreditAdapter extends RecyclerView.Adapter<CreditAdapter.CreditHolder> {
     private List<Credit> mCredits = new ArrayList<>();
 
-    public CreditApdater(List<Credit> credits) {
+    public CreditAdapter(List<Credit> credits) {
         mCredits = credits;
     }
 
@@ -55,12 +52,17 @@ public class CreditApdater extends RecyclerView.Adapter<CreditApdater.CreditHold
         TextView mMovieName;
         @BindView(R.id.cast_name)
         TextView mCastName;
+
         public CreditHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
+
         void bind(Credit credit) {
-            Picasso.get().load(Constants.POSTER_BASE_URL + credit.getPosterPath()).into(mPoster);
+            Picasso.get().load(Constants.POSTER_BASE_URL + credit.getPosterPath())
+                    .placeholder(R.drawable.fade_image)
+                    .error(R.drawable.image_error)
+                    .into(mPoster);
             mMovieName.setText(credit.getTitle());
             mCastName.setText(credit.getCharacter());
         }

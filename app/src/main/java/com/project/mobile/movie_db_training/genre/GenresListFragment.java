@@ -27,7 +27,6 @@ import butterknife.Unbinder;
  * A simple {@link Fragment} subclass.
  */
 public class GenresListFragment extends Fragment implements GenresListContract.View {
-    private static final String TAG = GenresListFragment.class.getSimpleName();
     @BindView(R.id.rv_genres_list)
     RecyclerView mGenresListRv;
     private RecyclerView.Adapter mAdapter;
@@ -89,14 +88,14 @@ public class GenresListFragment extends Fragment implements GenresListContract.V
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder = null;
+        mUnbinder.unbind();
         mGenreListPresenter.destroy();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mCallback = null;
+        super.onDetach();
     }
 
     interface Callback {

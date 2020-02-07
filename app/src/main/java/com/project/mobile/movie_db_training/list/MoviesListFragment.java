@@ -127,14 +127,14 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder = null;
+        mUnbinder.unbind();
         mPresenter.destroy();
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         mCallback = null;
+        super.onDetach();
     }
 
     public interface Callback {

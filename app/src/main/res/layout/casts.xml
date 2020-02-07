@@ -20,6 +20,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:msrv_gravity="start"
         app:msrv_ms_per_inch="@dimen/normal_speed"
         app:msrv_snap_count="1" />

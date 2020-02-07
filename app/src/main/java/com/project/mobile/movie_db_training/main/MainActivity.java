@@ -1,12 +1,18 @@
 package com.project.mobile.movie_db_training.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -23,6 +29,7 @@ import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.search.SearchActivity;
 import com.project.mobile.movie_db_training.setting.SettingsActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
+import com.project.mobile.movie_db_training.utils.NetworkChecking;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,23 +42,32 @@ public class MainActivity extends AppCompatActivity
     NavigationView mNavigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    ConnectivityManager connectivityManager;
+    ConnectivityManager.NetworkCallback mNetworkCallback = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(@NonNull Network network) {
+            super.onAvailable(network);
+            loadMovies();
+        }
+
+        @Override
+        public void onLost(@NonNull Network network) {
+            super.onLost(network);
+            showNetworkAlert();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
         ButterKnife.bind(this);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction
-                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing"));
-        fragmentTransaction
-                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
-        fragmentTransaction
-                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular"));
-        fragmentTransaction
-                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
-        fragmentTransaction.commit();
+        loadMovies();
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkRequest.Builder builder = new NetworkRequest.Builder();
+        connectivityManager.registerNetworkCallback(builder.build(), mNetworkCallback);
+
     }
 
     @Override
@@ -68,7 +84,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.refresh:
-                refresh();
+                loadMovies();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -125,6 +141,7 @@ public class MainActivity extends AppCompatActivity
         intent.putExtras(extras);
         startActivity(intent);
     }
+
     private void shareAppInfo() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -133,19 +150,25 @@ public class MainActivity extends AppCompatActivity
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
+
     private void sendFeedback() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"huyit12a5@gmail.com"});
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"huyit12a5@gmail.com"});
         sendIntent.setType("text/plain");
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
-    private void refresh() {
+
+    private void loadMovies() {
+        if (!NetworkChecking.checkInternetAvailability(this)) {
+            showNetworkAlert();
+            return;
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction
-                .replace(R.id.fragment_now_playing,  MoviesFragment.newInstance("now_playing"));
+                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing"));
         fragmentTransaction
                 .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
         fragmentTransaction
@@ -153,5 +176,24 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction
                 .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
         fragmentTransaction.commit();
+    }
+
+    private void showNetworkAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.network_title)
+                .setMessage(R.string.network_message);
+        builder.setPositiveButton(R.string.retry, (dialog, id) -> {
+            dialog.dismiss();
+            loadMovies();
+        });
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> dialog.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        connectivityManager.unregisterNetworkCallback(mNetworkCallback);
     }
 }

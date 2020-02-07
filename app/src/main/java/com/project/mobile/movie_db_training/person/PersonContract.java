@@ -8,12 +8,17 @@ import java.util.List;
 public interface PersonContract {
     interface View {
         void showPersonDetail(Person person);
+
         void showCredits(List<Credit> credits);
     }
 
     interface Presenter {
         void fetchPerson(String personId);
+
         void fetchCredits(String personId);
+
         void setView(PersonContract.View view);
+
+        void destroy();
     }
 }

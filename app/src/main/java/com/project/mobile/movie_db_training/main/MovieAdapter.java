@@ -66,7 +66,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             name.setText(movie.getTitle());
             rating.setText(movie.getVoteAverage());
             Picasso.get().load(Constants.POSTER_BASE_URL
-                    + movie.getPosterPath()).into(poster);
+                    + movie.getPosterPath())
+                    .error(R.drawable.image_error)
+                    .placeholder(R.drawable.fade_image)
+                    .into(poster);
         }
     }
 }

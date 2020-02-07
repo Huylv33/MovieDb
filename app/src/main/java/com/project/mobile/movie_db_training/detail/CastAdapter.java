@@ -67,7 +67,10 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CastHolder> {
         void bind(Cast cast) {
             mCastName.setText(cast.getName());
             Picasso.get().load(Constants.IMAGE_BASE_URL + "w185/" +
-                    cast.getProfilePath()).into(mCastProfile);
+                    cast.getProfilePath())
+                    .placeholder(R.drawable.fade_image)
+                    .error(R.drawable.image_error)
+                    .into(mCastProfile);
         }
     }
 }
