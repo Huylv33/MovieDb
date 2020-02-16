@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.data.local.MovieDatabase;
+import com.project.mobile.movie_db_training.data.local.MovieRepository;
 import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.MovieResponse;
@@ -20,16 +21,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
-    private static final String TAG = MoviesListPresenterImpl.class.getSimpleName();
     private MoviesListContract.View mView;
     private boolean mIsLoading = false;
     private int mTotalPages;
-    private int mPage = 1;
-    private MovieDatabase mMovieDatabase;
+    private int mCurrentPage = 1;
+    private MovieRepository mMovieRepository;
     private List<Movie> mMovies = new ArrayList<>();
 
     public MoviesListPresenterImpl(Context context) {
-        mMovieDatabase = MovieDatabase.getInstance(context);
+        mMovieRepository = new MovieRepository(context);
     }
 
     public int getTotalPages() {
@@ -54,11 +54,13 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
     public void fetchMovies(String option) {
         if (option == null) {
             //get local
-            List<FavoriteEntity> favorites = mMovieDatabase.favoritesDao().getAll();
-            for (int i = 0; i < favorites.size(); i++) {
-                mMovies.add(favoriteEntityToMovie(favorites.get(i)));
-            }
-            mView.showMovies(mMovies);
+            mMovieRepository.getAllMovie(favoriteEntities -> {
+                for (int i = 0; i < favoriteEntities.size(); i++) {
+                    mMovies.add(favoriteEntityToMovie(favoriteEntities.get(i)));
+                }
+                mView.showMovies(mMovies);
+            });
+
         } else if (option.equals(Constants.NOW_PLAYING) ||
                 option.equals(Constants.POPULAR) ||
                 option.equals(Constants.TOP_RATED) ||
@@ -75,7 +77,7 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
         mView.showLoading(Constants.LOADING_START);
         mIsLoading = true;
         NetworkModule.getTMDbService()
-                .getMovieList(listType, BuildConfig.TMDB_API_KEY, mPage)
+                .getMovieList(listType, BuildConfig.TMDB_API_KEY, mCurrentPage)
                 .enqueue(new Callback<MovieResponse>() {
                     @Override
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -91,7 +93,6 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
                         onFetchFail(t.getMessage());
                     }
                 });
-
     }
 
     //get movies by genre. Eg: Action, Comedy,...
@@ -100,7 +101,7 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
         mView.showLoading(Constants.LOADING_START);
         mIsLoading = true;
         NetworkModule.getTMDbService()
-                .getMoviesByGenre(BuildConfig.TMDB_API_KEY, genreId, mPage)
+                .getMoviesByGenre(BuildConfig.TMDB_API_KEY, genreId, mCurrentPage)
                 .enqueue(new Callback<MovieResponse>() {
                     @Override
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
@@ -133,6 +134,7 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
         Movie movie = new Movie();
         movie.setId(favoriteEntity.getId());
         movie.setBackdropPath(favoriteEntity.getBackdropPath());
+        movie.setPosterPath(favoriteEntity.getPosterPath());
         movie.setTitle(favoriteEntity.getTitle());
         movie.setReleaseDate(favoriteEntity.getReleaseDate());
         movie.setOverview(favoriteEntity.getOverview());
@@ -142,8 +144,8 @@ public class MoviesListPresenterImpl implements MoviesListContract.Presenter {
 
     @Override
     public void loadMore(String option) {
-        if (isLoading() || mPage > getTotalPages()) return;
-        mPage++;
+        if (isLoading() || mCurrentPage > getTotalPages()) return;
+        mCurrentPage++;
         fetchMovies(option);
     }
 }

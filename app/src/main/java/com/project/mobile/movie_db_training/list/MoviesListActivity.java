@@ -44,7 +44,7 @@ public class MoviesListActivity extends AppCompatActivity implements MoviesListF
             }
         } else {
             // hien thi local
-            initToolbar(Constants.FAVORITES);
+            initToolbar(Constants.FAVORITE_TITLE);
             moviesListFragment = new MoviesListFragment();
         }
         getSupportFragmentManager().beginTransaction()

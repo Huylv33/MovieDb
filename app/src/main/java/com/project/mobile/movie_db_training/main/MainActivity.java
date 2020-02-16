@@ -25,29 +25,26 @@ import com.project.mobile.movie_db_training.about.AboutActivity;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.genre.GenresListActivity;
+import com.project.mobile.movie_db_training.list.MoviesListActivity;
 import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.search.SearchActivity;
 import com.project.mobile.movie_db_training.setting.SettingsActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.NetworkChecking;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         MoviesListFragment.Callback {
     private static final String TAG = MainActivity.class.getSimpleName();
-    @BindView(R.id.nav_view)
+    //    @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-    @BindView(R.id.drawer_layout)
+    //    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     ConnectivityManager connectivityManager;
     ConnectivityManager.NetworkCallback mNetworkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
         public void onAvailable(@NonNull Network network) {
             super.onAvailable(network);
-            loadMovies();
         }
 
         @Override
@@ -62,12 +59,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        ButterKnife.bind(this);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.nav_view);
+//        ButterKnife.bind(this);
+
+        if (savedInstanceState != null) return;
         loadMovies();
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         connectivityManager.registerNetworkCallback(builder.build(), mNetworkCallback);
-
     }
 
     @Override
@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_discover:
                 startActivity(new Intent(this, GenresListActivity.class));
+                break;
+            case R.id.nav_favorite:
+                startActivity(new Intent(this, MoviesListActivity.class));
                 break;
             case R.id.nav_setting:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -165,16 +168,29 @@ public class MainActivity extends AppCompatActivity
             showNetworkAlert();
             return;
         }
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction
+//                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing"));
+//        fragmentTransaction
+//                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
+//        fragmentTransaction
+//                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular"));
+//        fragmentTransaction
+//                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
+//        fragmentTransaction.commit();
+        addMoviesFragment(MoviesFragment.newInstance("now_playing"),R.id.fragment_now_playing);
+        addMoviesFragment(MoviesFragment.newInstance("upcoming"),R.id.fragment_up_coming);
+        addMoviesFragment(MoviesFragment.newInstance("popular"),R.id.fragment_popular);
+        addMoviesFragment(MoviesFragment.newInstance("top_rated"),R.id.fragment_top_rated);
+    }
+
+    private void addMoviesFragment(MoviesFragment moviesFragment, int id) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction
-                .replace(R.id.fragment_now_playing, MoviesFragment.newInstance("now_playing"));
-        fragmentTransaction
-                .replace(R.id.fragment_up_coming, MoviesFragment.newInstance("upcoming"));
-        fragmentTransaction
-                .replace(R.id.fragment_popular, MoviesFragment.newInstance("popular"));
-        fragmentTransaction
-                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
+                .replace(id, moviesFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -191,9 +207,11 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy");
         connectivityManager.unregisterNetworkCallback(mNetworkCallback);
     }
 }

@@ -6,7 +6,6 @@ public class Constants {
     public static final String POPULAR = "popular";
     public static final String TOP_RATED = "top_rated";
     public static final String NOW_PLAYING = "now_playing";
-    public static final String BY_GENRE = "genre";
     public static final String GENRES_TITLE_BAR = "Genres";
     public static final String UPCOMING_TITLE_BAR = "Upcoming";
     public static final String POPULAR_TITLE_BAR = "Popular";
@@ -29,6 +28,6 @@ public class Constants {
     public static final String LOADING_START = "Loading...";
     public static final String RESPONSE_ERROR = "An error occurs";
     public static final String FAVORITES = "FavoriteEntity";
-    public static final String WATCH_LIST = "Watch List";
     public static final String ABOUT = "About";
+    public static final String FAVORITE_TITLE = "Favorite";
 }

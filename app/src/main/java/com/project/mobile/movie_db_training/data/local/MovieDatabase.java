@@ -13,7 +13,7 @@ import static com.project.mobile.movie_db_training.data.local.MovieDatabase.DATA
 @Database(entities = {FavoriteEntity.class}, version = DATABASE_VERSION, exportSchema = false)
 public abstract class MovieDatabase extends RoomDatabase {
     private static MovieDatabase sMovieDatabase;
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     private static final Object LOCK = new Object();
 
     public abstract FavoritesDao favoritesDao();
@@ -25,6 +25,7 @@ public abstract class MovieDatabase extends RoomDatabase {
             synchronized (LOCK) {
                 sMovieDatabase = Room.databaseBuilder(context.getApplicationContext(),
                         MovieDatabase.class, DATABASE_NAME)
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }

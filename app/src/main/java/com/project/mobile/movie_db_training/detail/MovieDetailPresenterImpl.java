@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.project.mobile.movie_db_training.BuildConfig;
-import com.project.mobile.movie_db_training.data.local.MovieDatabase;
+import com.project.mobile.movie_db_training.data.local.MovieRepository;
 import com.project.mobile.movie_db_training.data.model.CreditsResponse;
 import com.project.mobile.movie_db_training.data.model.FavoriteEntity;
 import com.project.mobile.movie_db_training.data.model.Movie;
@@ -27,11 +27,11 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
     private boolean mIsLoading;
     private int mReviewPage = 1;
     private int mTotalReviewPage;
-    private MovieDatabase mMovieDatabase;
+    private MovieRepository mMovieRepository;
     private boolean mIsFavorite;
 
     public MovieDetailPresenterImpl(Context context) {
-        mMovieDatabase = MovieDatabase.getInstance(context);
+        mMovieRepository = new MovieRepository(context);
     }
 
     @Override
@@ -126,29 +126,35 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
         mView.showLoading(message);
     }
 
-    private boolean isFavorite(String movieId) {
-        return mMovieDatabase.favoritesDao().getById(movieId) != null;
+    private void checkFavorite(String movieId) {
+        mMovieRepository.getMovieById(movieId, new MovieRepository.FavoriteCallBack() {
+            @Override
+            public void setFavorite(boolean favorite) {
+                mIsFavorite = favorite;
+            }
+        });
     }
 
     @Override
     public void onFabFavoriteClick(Movie movie) {
         FavoriteEntity favoriteEntity = new FavoriteEntity(movie);
-        if (!isFavorite(movie.getId())) {
-            mMovieDatabase.favoritesDao().insert(favoriteEntity);
-            mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
+        if (mIsFavorite) {
+            mMovieRepository.deleteMovie(favoriteEntity.getId(), () -> mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE));
         } else {
-            mMovieDatabase.favoritesDao().deleteById(favoriteEntity.getId());
-            mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
+            mMovieRepository.insertMovie(favoriteEntity, () -> mView.showFavoriteButton(Constants.FAVORITE_ACTIVE));
         }
     }
 
     @Override
     public void showFavorite(String movieId) {
-        if (isFavorite(movieId)) {
-            mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
-        } else {
-            mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
-        }
+        mMovieRepository.getMovieById(movieId, favorite -> {
+            mIsFavorite = favorite;
+            if (mIsFavorite) {
+                mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
+            } else {
+                mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
+            }
+        });
     }
 
     @Override

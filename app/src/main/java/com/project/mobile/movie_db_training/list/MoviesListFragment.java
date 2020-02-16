@@ -97,11 +97,9 @@ public class MoviesListFragment extends Fragment implements MoviesListContract.V
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mMoviesListRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                if (totalItemCount - 1 == lastVisibleItem) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)){
                     mPresenter.loadMore(mOption);
                 }
             }

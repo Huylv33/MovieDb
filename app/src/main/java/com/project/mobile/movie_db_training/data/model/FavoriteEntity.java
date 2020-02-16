@@ -18,6 +18,8 @@ public class FavoriteEntity {
     private String mVoteAverage;
     @ColumnInfo(name = "backdrop_path")
     private String mBackdropPath;
+    @ColumnInfo(name = "poster_path")
+    private String mPosterPath;
     @ColumnInfo(name = "release_date")
     private String mReleaseDate;
     @ColumnInfo(name = "overview")
@@ -31,6 +33,7 @@ public class FavoriteEntity {
         this.mTitle = movie.getTitle();
         this.mVoteAverage = movie.getVoteAverage();
         this.mBackdropPath = movie.getBackdropPath();
+        this.mPosterPath = movie.getPosterPath();
         this.mReleaseDate = movie.getReleaseDate();
         this.mOverview = movie.getOverview();
     }
@@ -65,6 +68,14 @@ public class FavoriteEntity {
 
     public void setBackdropPath(String backdropPath) {
         mBackdropPath = backdropPath;
+    }
+
+    public String getPosterPath() {
+        return mPosterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        mPosterPath = posterPath;
     }
 
     public String getReleaseDate() {

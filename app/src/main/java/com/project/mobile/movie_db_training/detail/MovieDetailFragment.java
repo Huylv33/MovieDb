@@ -100,7 +100,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         View rootView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
         setToolbar();
-//        setFloatButtonListener();
+        setFloatButtonListener();
         initCastLayout();
         initReviewsLayout();
         return rootView;
@@ -117,7 +117,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
             if (movie != null) {
                 mMovie = movie;
                 showInfo(mMovie);
-//                mPresenter.showFavorite(mMovie.getId());
+                mPresenter.showFavorite(mMovie.getId());
                 mPresenter.fetchCast(mMovie.getId());
                 mPresenter.fetchVideos(mMovie.getId());
                 mPresenter.fetchReviews(mMovie.getId());
@@ -144,11 +144,9 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mReviewsRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int totalItemCount = linearLayoutManager.getItemCount();
-                int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (totalItemCount == lastVisibleItem + 1) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
                     mPresenter.loadMoreReviews(mMovie.getId());
                 }
             }
@@ -163,6 +161,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         mCastAdapter = new CastAdapter(mCasts,mCallback);
         mCastRv.setAdapter(mCastAdapter);
     }
+
     private void setFloatButtonListener() {
         mFabFavorite.setOnClickListener(view1 -> {
             onFabFavoriteClick();

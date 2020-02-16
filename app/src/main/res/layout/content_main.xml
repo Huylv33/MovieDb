@@ -10,20 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <FrameLayout
             android:id="@+id/fragment_now_playing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <FrameLayout
             android:id="@+id/fragment_up_coming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <FrameLayout
             android:id="@+id/fragment_top_rated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
         <FrameLayout
             android:id="@+id/fragment_popular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fragment_blank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
