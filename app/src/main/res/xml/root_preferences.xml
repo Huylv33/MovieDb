@@ -31,7 +31,7 @@
     <PreferenceCategory app:title="@string/notification_header">
 
         <SwitchPreferenceCompat
-            app:key="notify"
+            app:key="notification"
             app:title="@string/notify_allow_title" />
 
     </PreferenceCategory>

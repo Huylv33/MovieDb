@@ -6,8 +6,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.project.mobile.movie_db_training.R;
+import com.project.mobile.movie_db_training.service.NotificationService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,6 +17,7 @@ import butterknife.ButterKnife;
 public class SettingsActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,12 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            SwitchPreferenceCompat notificationPreference = findPreference("notification");
+            notificationPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean isEnabled = (boolean) newValue;
+                NotificationService.setNotificationServiceAlarm(getActivity(), isEnabled);
+                return true;
+            });
         }
     }
 }

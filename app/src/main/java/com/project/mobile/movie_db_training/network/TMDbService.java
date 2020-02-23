@@ -51,4 +51,7 @@ public interface TMDbService {
 
     @GET("person/{person_id}/movie_credits")
     Call<CreditResponse> getMovieCredits(@Path("person_id") String id, @Query("api_key") String key);
+
+    @GET("movie/{movie_id}")
+    Call<Movie> getMovieDetail(@Path("movie_id") String id, @Query("api_key") String key);
 }

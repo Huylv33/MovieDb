@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity
         initView();
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.nav_view);
-//        ButterKnife.bind(this);
-
         if (savedInstanceState != null) return;
         loadMovies();
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -168,6 +166,7 @@ public class MainActivity extends AppCompatActivity
             showNetworkAlert();
             return;
         }
+
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction
@@ -179,10 +178,10 @@ public class MainActivity extends AppCompatActivity
 //        fragmentTransaction
 //                .replace(R.id.fragment_top_rated, MoviesFragment.newInstance("top_rated"));
 //        fragmentTransaction.commit();
-        addMoviesFragment(MoviesFragment.newInstance("now_playing"),R.id.fragment_now_playing);
-        addMoviesFragment(MoviesFragment.newInstance("upcoming"),R.id.fragment_up_coming);
-        addMoviesFragment(MoviesFragment.newInstance("popular"),R.id.fragment_popular);
-        addMoviesFragment(MoviesFragment.newInstance("top_rated"),R.id.fragment_top_rated);
+        addMoviesFragment(MoviesFragment.newInstance("now_playing"), R.id.fragment_now_playing);
+        addMoviesFragment(MoviesFragment.newInstance("upcoming"), R.id.fragment_up_coming);
+        addMoviesFragment(MoviesFragment.newInstance("popular"), R.id.fragment_popular);
+        addMoviesFragment(MoviesFragment.newInstance("top_rated"), R.id.fragment_top_rated);
     }
 
     private void addMoviesFragment(MoviesFragment moviesFragment, int id) {

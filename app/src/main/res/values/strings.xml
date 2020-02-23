@@ -43,6 +43,7 @@
     <string name="theme_title">Theme</string>
     <!-- Notification Preferences -->
     <string name="notify_allow_title">Allow to receive notifications</string>
+    <string name="notification_sound">Notification Sound</string>
     <string name="menu_item_refresh">Refresh</string>
 
     <!-- Alert Dialog -->
@@ -50,4 +51,8 @@
     <string name="retry">Retry</string>
     <string name="network_title">Device Offline</string>
     <string name="network_message">It looks like you are offline. Check your connection.</string>
+
+    <!-- Notification -->
+    <string name="channel_name">Movie Channel</string>
+    <string name="channel_description">MovieDB Channel</string>
 </resources>
