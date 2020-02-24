@@ -8,16 +8,19 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
 
 import com.project.mobile.movie_db_training.BuildConfig;
 import com.project.mobile.movie_db_training.R;
 import com.project.mobile.movie_db_training.data.model.Movie;
+import com.project.mobile.movie_db_training.detail.MovieDetailActivity;
 import com.project.mobile.movie_db_training.network.NetworkModule;
+import com.project.mobile.movie_db_training.utils.Constants;
 import com.project.mobile.movie_db_training.utils.NetworkChecking;
 
 import java.util.Random;
@@ -77,25 +80,38 @@ public class NotificationService extends IntentService {
     }
 
     public static void setNotificationServiceAlarm(Context context, boolean isNotificationEnabled) {
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = NotificationService.newIntent(context);
         intent.setAction(ACTION_MOVIE);
-        PendingIntent pendingIntent = PendingIntent.getService(context,0,intent,
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         if (isNotificationEnabled) {
             alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime()+1000* 4,
-                    AlarmManager.INTERVAL_DAY,pendingIntent);
+                    SystemClock.elapsedRealtime(),
+                    AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
         }
+    }
+
+    private PendingIntent getIntentToStartMovieDetail(Movie movie) {
+        Intent movieDetailIntent = new Intent(this, MovieDetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(Constants.MOVIE_KEY, movie);
+        movieDetailIntent.putExtras(extras);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(movieDetailIntent);
+        return stackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void movieNotification(Movie movie) {
         createNotificationChannel();
+        PendingIntent movieDetailPendingIntent = getIntentToStartMovieDetail(movie);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Discover")
                 .setContentText(movie.getTitle())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(movieDetailPendingIntent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(0, builder.build());
     }

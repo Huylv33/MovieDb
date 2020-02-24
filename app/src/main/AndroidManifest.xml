@@ -32,7 +32,9 @@
         <activity android:name=".person.PersonActivity" />
         <activity android:name=".search.SearchActivity" />
         <activity android:name=".list.MoviesListActivity" />
-        <activity android:name=".detail.MovieDetailActivity" />
+        <activity android:name=".detail.MovieDetailActivity"
+            android:parentActivityName=".main.MainActivity">
+        </activity>
         <activity android:name=".genre.GenresListActivity" />
         <activity android:name=".main.MainActivity" />
         <receiver android:name=".receiver.StartupReceiver">
