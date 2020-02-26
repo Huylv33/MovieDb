@@ -18,7 +18,12 @@ public class MovieRepository {
             @Override
             public void run() {
                 mMovieDatabase.favoritesDao().insert(favoriteEntity);
-                callback.update();
+                new MainThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.update();
+                    }
+                });
             }
         }).start();
     }
@@ -28,41 +33,51 @@ public class MovieRepository {
             @Override
             public void run() {
                 mMovieDatabase.favoritesDao().deleteById(id);
-                callback.update();
+                new MainThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.update();
+                    }
+                });
             }
         }).start();
     }
 
-    public void getMovieById(String id, FavoriteCallBack callback) {
+    public void getMovieById(String id, Callback2<Boolean> callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 FavoriteEntity favoriteEntity = mMovieDatabase.favoritesDao().getById(id);
-                if (favoriteEntity != null) {
-                    callback.setFavorite(true);
-                } else {
-                    callback.setFavorite(false);
-                }
+                new MainThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.update(favoriteEntity != null);
+                    }
+                });
             }
         }).start();
     }
-    public void getAllMovie(GetAllMovieCallBack callback) {
+
+    public void getAllMovie(Callback2<List<FavoriteEntity>> callback) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<FavoriteEntity> favoriteEntities = mMovieDatabase.favoritesDao().getAll();
-                callback.update(favoriteEntities);
+                new MainThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.update(favoriteEntities);
+                    }
+                });
             }
         }).start();
     }
+
     public interface Callback {
         void update();
     }
 
-    public interface FavoriteCallBack {
-        void setFavorite(boolean favorite);
-    }
-    public interface GetAllMovieCallBack {
-        void update(List<FavoriteEntity> favoriteEntities);
+    public interface Callback2<T> {
+        void update(T obj);
     }
 }

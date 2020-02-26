@@ -1,6 +1,7 @@
 package com.project.mobile.movie_db_training.detail;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -126,22 +127,22 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
         mView.showLoading(message);
     }
 
-    private void checkFavorite(String movieId) {
-        mMovieRepository.getMovieById(movieId, new MovieRepository.FavoriteCallBack() {
-            @Override
-            public void setFavorite(boolean favorite) {
-                mIsFavorite = favorite;
-            }
-        });
-    }
-
     @Override
     public void onFabFavoriteClick(Movie movie) {
         FavoriteEntity favoriteEntity = new FavoriteEntity(movie);
         if (mIsFavorite) {
-            mMovieRepository.deleteMovie(favoriteEntity.getId(), () -> mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE));
+            mMovieRepository.deleteMovie(favoriteEntity.getId(), () -> {
+                mView.showFavoriteButton(Constants.FAVORITE_NON_ACTIVE);
+                mIsFavorite = false;
+            });
         } else {
-            mMovieRepository.insertMovie(favoriteEntity, () -> mView.showFavoriteButton(Constants.FAVORITE_ACTIVE));
+            mMovieRepository.insertMovie(favoriteEntity, new MovieRepository.Callback() {
+                @Override
+                public void update() {
+                    mView.showFavoriteButton(Constants.FAVORITE_ACTIVE);
+                    mIsFavorite = true;
+                }
+            });
         }
     }
 
@@ -170,6 +171,7 @@ public class MovieDetailPresenterImpl implements MovieDetailContract.Presenter {
 
                     @Override
                     public void onFailure(Call<CreditsResponse> call, Throwable t) {
+                        //Todo
 
                     }
                 });

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.project.mobile.movie_db_training.R;
-import com.project.mobile.movie_db_training.data.model.Cast;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.person.PersonActivity;
 import com.project.mobile.movie_db_training.utils.Constants;
@@ -45,11 +44,13 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public void onCastClick(String id) {
         startPersonDetail(id);
     }
+
     private void startPersonDetail(String id) {
         Intent intent = new Intent(this, PersonActivity.class);
-        intent.putExtra("personId",id);
+        intent.putExtra("personId", id);
         startActivity(intent);
     }
+
     private void showNetworkAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.network_title)

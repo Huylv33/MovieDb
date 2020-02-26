@@ -29,7 +29,7 @@ public class MainPresenterImpl implements MainContract.Presenter {
                 .enqueue(new Callback<MovieResponse>() {
                     @Override
                     public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                        Log.d(TAG, "Success");
+                        Log.d(TAG, Thread.currentThread().getName());
                         if (response.isSuccessful() && response.body() != null) {
                             onFetchSuccess(response.body(), listType);
                         } else {
@@ -39,7 +39,6 @@ public class MainPresenterImpl implements MainContract.Presenter {
 
                    @Override
                     public void onFailure(Call<MovieResponse> call, Throwable t) {
-                       Log.d(TAG, "Fail");
                        onFetchFail(t.getMessage());
                     }
                 });

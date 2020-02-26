@@ -4,12 +4,12 @@ package com.project.mobile.movie_db_training.detail;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +31,6 @@ import com.project.mobile.movie_db_training.data.model.Cast;
 import com.project.mobile.movie_db_training.data.model.Movie;
 import com.project.mobile.movie_db_training.data.model.Review;
 import com.project.mobile.movie_db_training.data.model.Video;
-import com.project.mobile.movie_db_training.list.MoviesListFragment;
 import com.project.mobile.movie_db_training.utils.Constants;
 import com.squareup.picasso.Picasso;
 import com.takusemba.multisnaprecyclerview.MultiSnapRecyclerView;
@@ -76,9 +75,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
     private List<Review> mReviews = new ArrayList<>();
     private List<Cast> mCasts = new ArrayList<>();
     private Callback mCallback;
+
     public MovieDetailFragment() {
         // Required empty public constructor
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,6 +87,7 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
             mCallback = (MovieDetailFragment.Callback) context;
         }
     }
+
     public static MovieDetailFragment newInstance(@NonNull Movie movie) {
         Bundle args = new Bundle();
         args.putParcelable(Constants.MOVIE_KEY, movie);
@@ -155,10 +157,11 @@ public class MovieDetailFragment extends Fragment implements MovieDetailContract
         mReviewsAdapter = new ReviewsListAdapter(mReviews);
         mReviewsRv.setAdapter(mReviewsAdapter);
     }
+
     private void initCastLayout() {
         mCastRv.setLayoutManager(new LinearLayoutManager(getContext(),
-                LinearLayoutManager.HORIZONTAL,false));
-        mCastAdapter = new CastAdapter(mCasts,mCallback);
+                LinearLayoutManager.HORIZONTAL, false));
+        mCastAdapter = new CastAdapter(mCasts, mCallback);
         mCastRv.setAdapter(mCastAdapter);
     }
 

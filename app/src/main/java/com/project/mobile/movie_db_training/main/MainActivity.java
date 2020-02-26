@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         connectivityManager.registerNetworkCallback(builder.build(), mNetworkCallback);
-    }
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
